@@ -99,6 +99,9 @@ from redis                                   import Redis
 from redisvl.schema                          import IndexSchema
 from structlog                               import get_logger
 
+from ia_communicate.main                     import communicate
+from ia_communicate.main                     import get_limits
+
 logger = get_logger()
 
 class SPyDirConfig():
@@ -114,7 +117,7 @@ class SPyDirConfig():
 		self.base_url         :str  = 'http://192.168.2.249:11434'
 		self.chat_model       :str  = 'llama3.2'
 		self.chat_memory_model:str  = 'llama3.2'
-		self.request_timeout  :int  = 600
+		self.request_timeout  :int  = (60 * 30) # 30 minutes
 
 		self.redis_host       :str  = '192.168.2.249'
 		self.redis_port       :int  = 6379
@@ -316,20 +319,20 @@ class SPyDirConfig():
 		docs:List[Document] = self.load_data()
 		self.index.refresh(docs)
 
-async def communicate(client:AsyncClient, url:str, message:str, uid:str,)->str:
-	params  :Dict[str,str] = {
-		'message': message,
-		'client' : uid,
-	}
-	#response               = await client.get(url, params=params, timeout=None,) # TODO 600 ?
-	response               = await client.get(url, params=params,)
-	if (response.status_code != 200):
-		await logger.awarn('status code: %s', response.status_code,)
-		return None
-	content :bytes         = response.content
-	result  :str           = content.decode('utf-8')
-	await logger.ainfo('response: %s', result,)
-	return result
+#async def communicate(client:AsyncClient, url:str, message:str, uid:str,)->str:
+#	params  :Dict[str,str] = {
+#		'message': message,
+#		'client' : uid,
+#	}
+#	#response               = await client.get(url, params=params, timeout=None,) # TODO 600 ?
+#	response               = await client.get(url, params=params,)
+#	if (response.status_code != 200):
+#		await logger.awarn('status code: %s', response.status_code,)
+#		return None
+#	content :bytes         = response.content
+#	result  :str           = content.decode('utf-8')
+#	await logger.ainfo('response: %s', result,)
+#	return result
 
 async def _main(
 	srcdir    :Path,
@@ -342,11 +345,12 @@ async def _main(
 
 	config.update_index()
 
-	max_connections          :int    = 10
-	max_keepalive_connections:int    =  5
-	limits                   :Limits = Limits(
-		max_connections          =max_connections,
-		max_keepalive_connections=max_keepalive_connections,)
+	#max_connections          :int    = 10
+	#max_keepalive_connections:int    =  5
+	#limits                   :Limits = Limits(
+	#	max_connections          =max_connections,
+	#	max_keepalive_connections=max_keepalive_connections,)
+	limits                   :Limits = get_limits()
 	
 	async with AsyncClient(limits=limits, timeout=None,) as client:
 		message:str         = str(f'I am {config.namespace}, the Directory RAG. I am initiating a conversation with Crow Xi, the Operator.')
@@ -362,7 +366,7 @@ async def _main(
 			response:Iterator[str] = config.chat(message=message,)
 			message                = ''.join(response)
 			await logger.ainfo('SPyDir: %s', message,)
-			message                = await communicate(client=client, url=url, message=message,)
+			message                = await communicate(client=client, url=url, message=message, uid=config.namespace,)
 			await logger.ainfo('Crow Xi: %s', message,)
 
 def main()->None:
