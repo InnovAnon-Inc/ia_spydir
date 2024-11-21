@@ -274,7 +274,7 @@ class SPyDirConfig():
 		)
 
 	def chat(self, message:str,)->Iterator[str]:
-		assert isinstance(message,str)
+		assert isinstance(message,str), type(message)
 		response_stream:ChatResponse = self.engine.stream_chat(message,)
 		for token in response_stream.response_gen:
 			yield token
@@ -361,7 +361,7 @@ async def _main(
 		await config.memory.aput(message=msg,)
 		message:str         = await communicate(client=client, url=url, message=message, uid=config.namespace)
 		await logger.ainfo('Crow Xi: %s', message,)
-		assert isinstance(message,str)
+		assert isinstance(message,str), type(message)
 
 		while True:
 			config.update_index()
@@ -370,7 +370,7 @@ async def _main(
 			await logger.ainfo('SPyDir: %s', message,)
 			message                = await communicate(client=client, url=url, message=message, uid=config.namespace,)
 			await logger.ainfo('Crow Xi: %s', message,)
-			assert isinstance(message,str)
+			assert isinstance(message,str), type(message)
 
 def main()->None:
 
