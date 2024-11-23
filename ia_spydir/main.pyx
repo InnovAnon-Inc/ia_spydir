@@ -260,6 +260,11 @@ class SPyDirConfig():
 			embed_model      =self.embed_model,
 			insert_batch_size=1,)
 
+	@cached_property
+	def retriever(self,)->BaseRetriever:
+		return self.index.as_retriever(
+			similarity_top_k=self.similarity_top_k,)
+
 	#@property
 	#def engine(self,)->BaseChatEngine:
 	#	# TODO time-weighted
