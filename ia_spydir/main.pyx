@@ -260,24 +260,24 @@ class SPyDirConfig():
 			embed_model      =self.embed_model,
 			insert_batch_size=1,)
 
-	@property
-	def engine(self,)->BaseChatEngine:
-		# TODO time-weighted
-		# TODO node postprocessors
-		return self.index.as_chat_engine(
-			llm              =self.chat_llm,
-			memory           =self.memory,
-			chat_mode        =ChatMode.CONDENSE_PLUS_CONTEXT,
-			storage_context  =self.storage_context,
-			#transformations =self.transformations,
-			#show_progress    =self.verbose,)
-		)
-
-	def chat(self, message:str,)->Iterator[str]:
-		assert isinstance(message,str), type(message)
-		response_stream:ChatResponse = self.engine.stream_chat(message,)
-		for token in response_stream.response_gen:
-			yield token
+	#@property
+	#def engine(self,)->BaseChatEngine:
+	#	# TODO time-weighted
+	#	# TODO node postprocessors
+	#	return self.index.as_chat_engine(
+	#		llm              =self.chat_llm,
+	#		memory           =self.memory,
+	#		chat_mode        =ChatMode.CONDENSE_PLUS_CONTEXT,
+	#		storage_context  =self.storage_context,
+	#		#transformations =self.transformations,
+	#		#show_progress    =self.verbose,)
+	#	)
+	#
+	#def chat(self, message:str,)->Iterator[str]:
+	#	assert isinstance(message,str), type(message)
+	#	response_stream:ChatResponse = self.engine.stream_chat(message,)
+	#	for token in response_stream.response_gen:
+	#		yield token
 
 	@cached_property
 	def reader(self,)->SimpleDirectoryReader:
@@ -335,10 +335,51 @@ class SPyDirConfig():
 #	await logger.ainfo('response: %s', result,)
 #	return result
 
-async def _main(
-	srcdir    :Path,
-	url       :str,
-)->None:
+#async def _main(
+#	srcdir    :Path,
+#	url       :str,
+#)->None:
+#
+#	config:SPyDirConfig = SPyDirConfig(
+#		srcdir=srcdir,
+#	)
+#
+#	config.update_index()
+
+	# TODO disable chat
+
+	#max_connections          :int    = 10
+	#max_keepalive_connections:int    =  5
+	#limits                   :Limits = Limits(
+	#	max_connections          =max_connections,
+	#	max_keepalive_connections=max_keepalive_connections,)
+	#limits                   :Limits = get_limits()
+	#	
+	#async with AsyncClient(limits=limits, timeout=None,) as client:
+	#	message:str         = str(f'I am {config.namespace}, the Directory RAG. I am initiating a conversation with Crow Xi, the Operator.')
+	#	msg    :ChatMessage = ChatMessage(
+	#		role   =MessageRole.ASSISTANT,
+	#		content=message,)
+	#	await config.memory.aput(message=msg,)
+	#	message:str         = await communicate(client=client, url=url, message=message, uid=config.namespace)
+	#	await logger.ainfo('Crow Xi: %s', message,)
+	#	assert isinstance(message,str), type(message)
+	#
+	#	while True:
+	#		config.update_index()
+	#		response:Iterator[str] = config.chat(message=message,)
+	#		message                = ''.join(response)
+	#		await logger.ainfo('SPyDir: %s', message,)
+	#		message                = await communicate(client=client, url=url, message=message, uid=config.namespace,)
+	#		await logger.ainfo('Crow Xi: %s', message,)
+	#		assert isinstance(message,str), type(message)
+
+def main()->None:
+
+	dotenv.load_dotenv()
+
+	srcdir         :Path            = Path()
+	logger.info('srcdir          : %s', srcdir,)
 
 	config:SPyDirConfig = SPyDirConfig(
 		srcdir=srcdir,
@@ -346,44 +387,11 @@ async def _main(
 
 	config.update_index()
 
-	#max_connections          :int    = 10
-	#max_keepalive_connections:int    =  5
-	#limits                   :Limits = Limits(
-	#	max_connections          =max_connections,
-	#	max_keepalive_connections=max_keepalive_connections,)
-	limits                   :Limits = get_limits()
-	
-	async with AsyncClient(limits=limits, timeout=None,) as client:
-		message:str         = str(f'I am {config.namespace}, the Directory RAG. I am initiating a conversation with Crow Xi, the Operator.')
-		msg    :ChatMessage = ChatMessage(
-			role   =MessageRole.ASSISTANT,
-			content=message,)
-		await config.memory.aput(message=msg,)
-		message:str         = await communicate(client=client, url=url, message=message, uid=config.namespace)
-		await logger.ainfo('Crow Xi: %s', message,)
-		assert isinstance(message,str), type(message)
-
-		while True:
-			config.update_index()
-			response:Iterator[str] = config.chat(message=message,)
-			message                = ''.join(response)
-			await logger.ainfo('SPyDir: %s', message,)
-			message                = await communicate(client=client, url=url, message=message, uid=config.namespace,)
-			await logger.ainfo('Crow Xi: %s', message,)
-			assert isinstance(message,str), type(message)
-
-def main()->None:
-
-	dotenv.load_dotenv()
-
-	srcdir         :Path            = Path()
-	url            :str             =     os.getenv ('CROWXI',      'http://192.168.2.249:10007/')
-	logger.info('srcdir          : %s', srcdir,)
-	logger.info('url             : %s', url,)
-
-	asyncio.run(_main(
-		srcdir    =srcdir,
-		url       =url, ))
+	#url            :str             =     os.getenv ('CROWXI',      'http://192.168.2.249:10007/')
+	#logger.info('url             : %s', url,)
+	#asyncio.run(_main(
+	#	srcdir    =srcdir,
+	#	url       =url, ))
 
 if __name__ == '__main__':
 	main()
