@@ -1,10 +1,10 @@
 services:
-  ia_setup:
-    hostname:         ia_setup.innovanon.com
+  ia_spydir:
+    hostname:         ia_spydir.innovanon.com
     build:
       context:        .
       tags:
-        - ia_setup:latest
+        - ia_spydir:latest
     restart:          no
     logging:
       driver:         syslog   
