@@ -5,9 +5,9 @@ services:
       context:        .
       tags:
         - innovanon/ia_spydir:latest
-        -           ia_spydir:latest
-        - innovanon/ia_spydir
-        -           ia_spydir
+    #    -           ia_spydir:latest
+    #    - innovanon/ia_spydir
+    #    -           ia_spydir
     image:            innovanon/ia_spydir
     restart:          no
     logging:
