@@ -8,6 +8,7 @@ services:
         -           ia_spydir:latest
         - innovanon/ia_spydir
         -           ia_spydir
+    image:            innovanon/ia_spydir
     restart:          no
     logging:
       driver:         syslog   
