@@ -4,7 +4,10 @@ services:
     build:
       context:        .
       tags:
-        - ia_spydir:latest
+        - innovanon/ia_spydir:latest
+        -           ia_spydir:latest
+        - innovanon/ia_spydir
+        -           ia_spydir
     restart:          no
     logging:
       driver:         syslog   
