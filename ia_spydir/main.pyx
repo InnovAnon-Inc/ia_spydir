@@ -271,6 +271,14 @@ class SPyDirConfig():
 		return self.index.as_retriever(
 			similarity_top_k=self.similarity_top_k,)
 
+	@cached_property
+	def query_engine(self,)->BaseQueryEngine:
+		return RetrieverQueryEngine.from_args(
+			retriever=self.retriever,
+			llm      =self.chat_llm,
+			#response_synthesizer=,
+		)
+
 	#@property
 	#def engine(self,)->BaseChatEngine:
 	#	# TODO time-weighted
