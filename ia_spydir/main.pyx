@@ -85,6 +85,7 @@ from llama_index.core.retrievers             import AutoMergingRetriever
 from llama_index.core.storage.chat_store     import BaseChatStore
 from llama_index.core.tools                  import QueryEngineTool
 from llama_index.core.tools                  import FunctionTool
+from llama_index.core.tools.types            import ToolMetadata
 from llama_index.embeddings.ollama           import OllamaEmbedding
 #from llama_index.extractors.entity           import EntityExtractor
 from llama_index.llms.ollama                 import Ollama
@@ -282,7 +283,7 @@ class SPyDirConfig():
 	@cached_property
 	def tool_metadata(self,)->ToolMetadata:
 		return ToolMetadata(
-			description   ='', # TODO
+			description   =str(f'Directory Index Retriever Query Engine: {self.srcdir.resolve()}'),
 			#name         =None,
 			#fn_schema    =,
 			#return_direct=False,
