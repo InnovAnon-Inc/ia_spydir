@@ -86,6 +86,7 @@ from llama_index.core.storage.chat_store     import BaseChatStore
 from llama_index.core.tools                  import QueryEngineTool
 from llama_index.core.tools                  import FunctionTool
 from llama_index.core.tools.types            import ToolMetadata
+from llama_index.core.tools.types            import AsyncBaseTool
 from llama_index.embeddings.ollama           import OllamaEmbedding
 #from llama_index.extractors.entity           import EntityExtractor
 from llama_index.llms.ollama                 import Ollama
@@ -288,6 +289,12 @@ class SPyDirConfig():
 			#fn_schema    =,
 			#return_direct=False,
 		)
+
+	@cached_property
+	def query_engine_tool(self,)->BaseTool:
+		return QueryEngineTool(
+			query_engine=self.query_engine,
+			metadata    =self.tool_metadata, )
 
 	#@property
 	#def engine(self,)->BaseChatEngine:
