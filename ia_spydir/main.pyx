@@ -285,7 +285,7 @@ class SPyDirConfig():
 	def tool_metadata(self,)->ToolMetadata:
 		return ToolMetadata(
 			description   =str(f'Directory Index Retriever Query Engine: {self.srcdir.resolve()}'),
-			#name         =None,
+			name          =str(f'spydir_{self.srcdir.resolve().name}'),
 			#fn_schema    =,
 			#return_direct=False,
 		)
