@@ -279,6 +279,15 @@ class SPyDirConfig():
 			#response_synthesizer=,
 		)
 
+	@cached_property
+	def tool_metadata(self,)->ToolMetadata:
+		return ToolMetadata(
+			description   ='', # TODO
+			#name         =None,
+			#fn_schema    =,
+			#return_direct=False,
+		)
+
 	#@property
 	#def engine(self,)->BaseChatEngine:
 	#	# TODO time-weighted
