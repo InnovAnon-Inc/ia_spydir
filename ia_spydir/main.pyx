@@ -291,7 +291,7 @@ class SPyDirConfig():
 		)
 
 	@cached_property
-	def query_engine_tool(self,)->BaseTool:
+	def query_engine_tool(self,)->AsyncBaseTool:
 		return QueryEngineTool(
 			query_engine=self.query_engine,
 			metadata    =self.tool_metadata, )
