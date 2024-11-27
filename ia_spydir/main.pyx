@@ -354,6 +354,7 @@ class SPyDirConfig():
 
 	def update_index(self,)->None:
 		docs:List[Document] = self.load_data()
+		logger.debug('#docs: %s', len(docs),)
 		self.index.refresh(docs)
 
 #async def communicate(client:AsyncClient, url:str, message:str, uid:str,)->str:
