@@ -176,8 +176,9 @@ class SPyDirConfig():
 	@cached_property
 	def memory(self,)->BaseMemory:
 		return ChatMemoryBuffer.from_defaults(
-			llm       =self.chat_memory_llm,
-			chat_store=self.chat_store,)
+			llm           =self.chat_memory_llm,
+			chat_store    =self.chat_store,
+			chat_store_key=self.chat_store_key,)
 
 	@property
 	def namespace(self,)->str:
